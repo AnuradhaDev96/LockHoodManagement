@@ -17,7 +17,7 @@ namespace MSS_API.Controllers
 
         [HttpGet("all", Name = "GetWorkshops")]
         [ProducesResponseType(200, Type=(typeof(IEnumerable<Workshop>)))]
-        public IActionResult GetWorkshops()
+        public IActionResult GetAll()
         {
             var workshops = _workshopRepository.GetWorkshops();
             
@@ -31,7 +31,7 @@ namespace MSS_API.Controllers
         [ProducesResponseType(200, Type = (typeof(Workshop)))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult GetWorkshop(int id)
+        public IActionResult GetRecordById(int id)
         {
             if (!_workshopRepository.CheckWorkshopIsExist(id))
                 return NotFound();
@@ -45,7 +45,7 @@ namespace MSS_API.Controllers
         }
 
 
-        [HttpGet("{id}/rating")]
+        [HttpGet("{id}/name")]
         [ProducesResponseType(200, Type = (typeof(string)))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -62,6 +62,77 @@ namespace MSS_API.Controllers
             return Ok(name);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public IActionResult CreateRecord([FromBody] Workshop data)
+        {
+            if (data == null)
+                return BadRequest(ModelState);
 
+            //var workshop = _workshopRepository.GetWorkshops().Where(w => w.Name.Trim().ToUpper() == workshopCreate.Name.Trim().ToUpper());
+
+            //if (workshop != null)
+            //{
+            //    ModelState.AddModelError("", "Record already exists");
+            //    return StatusCode(422, ModelState);
+            //}
+
+            if (!_workshopRepository.CreateWorkshop(data))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateRecord([FromBody] Workshop data)
+        {
+            if (data == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_workshopRepository.CheckWorkshopIsExist(data.Id))
+                return NotFound();
+
+            if(!_workshopRepository.UpdateWorkshop(data))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteRecord(int id)
+        {
+
+            if (!_workshopRepository.CheckWorkshopIsExist(id))
+                return NotFound();
+
+            var data = _workshopRepository.GetWorkshop(id);
+
+            if (data == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_workshopRepository.DeleteWorkshop(data))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
