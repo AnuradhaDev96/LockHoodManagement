@@ -63,7 +63,7 @@ namespace MSS_API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateRecord([FromBody] Workshop data)
@@ -85,7 +85,7 @@ namespace MSS_API.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Successfully created");
+            return StatusCode(201, "Successfully created");
         }
 
         [HttpPut]

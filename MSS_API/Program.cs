@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Add mapping profile
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Add dependency injections
 builder.Services.AddScoped<IWorkshopRepository, WorkshopRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

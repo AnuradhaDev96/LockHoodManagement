@@ -1,5 +1,6 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MSS_API.Models.Inventories
 {
@@ -23,8 +24,9 @@ namespace MSS_API.Models.Inventories
         public double AvailableQuantity { get; set; }
 
         //Inventory item has One inventory (1-M relationship)
+        [ForeignKey("Inventory")]
         [Display(Name = "Inventory")]
-        [SwaggerSchema(Description = "Inventory that item belongs to")]
+        public int InventoryId { get; set; }
         public Inventory Inventory { get; set; }
     }
 }
