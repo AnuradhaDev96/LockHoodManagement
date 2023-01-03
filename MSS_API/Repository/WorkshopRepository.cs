@@ -37,5 +37,37 @@ namespace MSS_API.Repository
         {
            return _context.Workshops.Where(w => w.Id == id).FirstOrDefault().Name;
         }
+
+        public bool CreateWorkshop(Workshop workshop)
+        {
+            //var workshop = new Workshop()
+            //{
+            //    Name = name,
+            //    FactoryId = factoryId,
+            //};
+
+            _context.Workshops.Add(workshop);
+
+            return Save();
+
+        }
+
+        public bool UpdateWorkshop(Workshop workshop)
+        {
+            _context.Workshops.Update(workshop);
+            return Save();
+        }
+
+        public bool DeleteWorkshop(Workshop workshop)
+        {
+            _context.Workshops.Remove(workshop);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }        
     }
 }

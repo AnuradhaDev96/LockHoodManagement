@@ -13,5 +13,15 @@ namespace MSS_API.Interfaces
         bool CheckWorkshopIsExist(int id);
 
         string? GetWorkshopName(int id);
+
+        //bool CreateWorkshop(string name, int factoryId);
+
+        bool CreateWorkshop(Workshop workshop);
+
+        bool UpdateWorkshop(Workshop workshop);
+
+        bool DeleteWorkshop(Workshop workshop);
+
+        bool Save();
     }
 }
