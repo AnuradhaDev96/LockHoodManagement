@@ -134,5 +134,37 @@ namespace MSS_API.Controllers
 
             return NoContent();
         }
+
+        //Update by code. Only selected fields.
+        [HttpPut("{id}/ChangeFactory")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateFactoryOfWorkshop(int id)
+        {
+            //if (data == null || !ModelState.IsValid)
+            //    return BadRequest(ModelState);
+
+            if (!_workshopRepository.CheckWorkshopIsExist(id))
+                return NotFound();
+
+            var data = _workshopRepository.GetWorkshop(id);
+
+            if (data == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //change factory id
+            data.FactoryId = 5;
+
+            if (!_workshopRepository.UpdateWorkshop(data))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
     }
 }
