@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MSS_API.Models.Workshops;
 using System.ComponentModel.DataAnnotations.Schema;
+using MSS_API.Models.AutomatedWarehouseRequests;
 
 namespace MSS_API.Models.Inventories
 {
@@ -27,5 +28,9 @@ namespace MSS_API.Models.Inventories
         [Display(Name = "Inventory Items")]
         [SwaggerSchema(Description = "Items of an inventory")]
         public ICollection<InventoryItems> InventoryItems { get; set; }
+
+        //Inventory has Many AutomatedWarehouseRequests (1-M relationship)
+        [Display(Name = "Automated Warehouse Requests")]
+        public ICollection<AutomatedWarehouseRequest> AutomatedWarehouseRequests { get; set; }
     }
 }
