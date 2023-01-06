@@ -6,7 +6,6 @@ namespace MSS_API.Models.Workshops
     public class WarehouseItem
     {
         [Key]
-        [Required]
         [Display(Name = "Product Code")]
         public string ProductCode { get; set; }
 

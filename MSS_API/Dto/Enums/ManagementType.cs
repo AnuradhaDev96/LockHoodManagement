@@ -15,5 +15,8 @@ namespace MSS_API.Dto.Enums
 
         [Display(Name = "LowLevel", Description = "Low level manager")]
         LowLevel = 3,
+
+        [Display(Name = "Labourer", Description = "Labourer")]
+        Labourer = 4,
     }
 }
