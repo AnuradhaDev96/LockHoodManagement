@@ -1,4 +1,5 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using MSS_API.Models.WorkMonitoring;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -18,5 +19,7 @@ namespace MSS_API.Models.Workshops
         [Display(Name = "Factory Id")]
         [SwaggerSchema(Description = "Factory that workshop belongs to")]
         public int FactoryId { get; set; }
+
+        public ICollection<ProductionBatch> ProductionBatches { get; set; }
     }
 }

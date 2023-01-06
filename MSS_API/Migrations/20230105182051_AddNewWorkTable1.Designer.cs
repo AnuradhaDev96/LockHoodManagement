@@ -4,6 +4,7 @@ using MSS_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSSAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230105182051_AddNewWorkTable1")]
+    partial class AddNewWorkTable1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,18 +256,16 @@ namespace MSSAPI.Migrations
                     b.Property<int>("ExpectedAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("LabourerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductionBatchId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BatchId");
-
-                    b.HasIndex("LabourerId");
+                    b.HasIndex("ProductionBatchId");
 
                     b.ToTable("KanBanTasks");
                 });
@@ -417,17 +418,9 @@ namespace MSSAPI.Migrations
                 {
                     b.HasOne("MSS_API.Models.WorkMonitoring.ProductionBatch", "ProductionBatch")
                         .WithMany("KanBanTasks")
-                        .HasForeignKey("BatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("ProductionBatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MSS_API.Models.EmployeeUsers.EmployeeUser", "Labourer")
-                        .WithMany("KanBanTasks")
-                        .HasForeignKey("LabourerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Labourer");
 
                     b.Navigation("ProductionBatch");
                 });
@@ -463,8 +456,6 @@ namespace MSSAPI.Migrations
 
             modelBuilder.Entity("MSS_API.Models.EmployeeUsers.EmployeeUser", b =>
                 {
-                    b.Navigation("KanBanTasks");
-
                     b.Navigation("ProductionBatches");
                 });
 

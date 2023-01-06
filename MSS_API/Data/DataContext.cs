@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSS_API.Models.AutomatedWarehouseRequests;
+using MSS_API.Models.Decisions;
 using MSS_API.Models.Departments;
 using MSS_API.Models.EmployeeUsers;
 using MSS_API.Models.Factories;
 using MSS_API.Models.Inventories;
+using MSS_API.Models.WorkMonitoring;
 using MSS_API.Models.Workshops;
 
 namespace MSS_API.Data
@@ -32,7 +34,14 @@ namespace MSS_API.Data
         public DbSet<AutomatedWarehouseRequest> AutomatedWarehouseRequests { get; set; }
         
         public DbSet<AutomatedRequestWarehouseItem> AutomatedWarehouseRequestItems { get; set; }
-
+        
+        public DbSet<ProductionBatch> ProductionBatches { get; set; }
+        
+        public DbSet<ManagementDecisions> ManagementDecisions { get; set; }
+        
+        public DbSet<EmployeePerformance> EmployeePerformances { get; set; }
+        
+        public DbSet<KanBanTask> KanBanTasks { get; set; }
 
         //For Many-Many relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,6 +59,17 @@ namespace MSS_API.Data
                 .WithMany(w => w.AutomatedRequestWarehouseItems)
                 .HasForeignKey(ai => ai.ProductCode);
 
+            modelBuilder.Entity<KanBanTask>()
+                .HasOne(kbt => kbt.ProductionBatch)
+                .WithMany(p => p.KanBanTasks)
+                .HasForeignKey(kbt => kbt.BatchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<KanBanTask>()
+                .HasOne(kbt => kbt.Labourer)
+                .WithMany(e => e.KanBanTasks)
+                .HasForeignKey(kbt => kbt.LabourerId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
