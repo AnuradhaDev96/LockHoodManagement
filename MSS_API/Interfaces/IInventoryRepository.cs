@@ -7,6 +7,8 @@ namespace MSS_API.Interfaces
     {
         ICollection<Inventory> GetInventories();
 
+        Inventory? GetInventoryByWorkshopId(int workshopId);
+
         Inventory? GetInventory(int id);
 
         Inventory? GetInventory(string name);
@@ -29,5 +31,8 @@ namespace MSS_API.Interfaces
 
         ICollection<Workshop> GetWorkshopListWithSingleInventory();
 
+        ICollection<InventoryItems> GetItemsListOfInventory(int inventoryId);
+
+        ICollection<InventoryItems> GetAllItemsList();
     }
 }

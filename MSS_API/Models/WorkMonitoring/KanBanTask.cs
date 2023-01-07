@@ -1,4 +1,5 @@
-﻿using MSS_API.Models.EmployeeUsers;
+﻿using MSS_API.Dto.Enums;
+using MSS_API.Models.EmployeeUsers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,9 @@ namespace MSS_API.Models.WorkMonitoring
 
         [Display(Name = "Name")]
         public string Name { get; set; }
+        
+        [Display(Name = "Status")]
+        public KanBanStatus Status { get; set; }
 
         // KanBanTask has One ProductionBatch (1-M relationship)
         [ForeignKey("BatchId")]

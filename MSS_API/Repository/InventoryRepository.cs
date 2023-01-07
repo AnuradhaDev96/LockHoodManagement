@@ -80,5 +80,22 @@ namespace MSS_API.Repository
             _context.InventoryItems.Add(inventoryItem);
             return Save();
         }
+
+
+
+        public Inventory? GetInventoryByWorkshopId(int workshopId)
+        {
+            return _context.Inventories.Where(w => w.WorkshopId == workshopId).FirstOrDefault();
+        }
+
+        public ICollection<InventoryItems> GetItemsListOfInventory(int inventoryId)
+        {
+            return _context.InventoryItems.OrderBy(w => w.Id).Where(x => x.InventoryId == inventoryId).ToList();
+        }
+
+        public ICollection<InventoryItems> GetAllItemsList()
+        {
+            return _context.InventoryItems.OrderBy(w => w.Id).ToList();
+        }
     }
 }
