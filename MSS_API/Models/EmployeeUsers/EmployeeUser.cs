@@ -1,4 +1,5 @@
-﻿using MSS_API.Models.Departments;
+﻿using MSS_API.Dto.Enums;
+using MSS_API.Models.Departments;
 using MSS_API.Models.WorkMonitoring;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,9 @@ namespace MSS_API.Models.EmployeeUsers
 
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Management Type")]
+        public ManagementType ManagementType { get; set; }
 
         //Employee has One Department (1-M relationship)
         [ForeignKey("Department")]

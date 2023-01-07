@@ -133,6 +133,39 @@ namespace MSS_API.Controllers
 
             return StatusCode(201, "Successfully created");
         }
+        
+        [HttpGet("ItemsOfWorkshop/{workshopId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(200, Type = (typeof(IEnumerable<InventoryItems>)))]
+        public IActionResult GetInventoryItemsByWorkshopId(int workshopId)
+        {
+            var inventory = _inventoryRepository.GetInventory(workshopId);
+
+            if (inventory == null)
+                return NotFound(@$"Inventory does not exist for workshop id {workshopId}");
+
+            var items = _inventoryRepository.GetItemsListOfInventory(inventory.Id);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(items);
+        }
+
+        [HttpGet("items")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200, Type = (typeof(IEnumerable<InventoryItems>)))]
+        public IActionResult GetAllInventoryItems()
+        {
+
+            var items = _inventoryRepository.GetAllItemsList();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(items);
+        }
         #endregion
     }
 }

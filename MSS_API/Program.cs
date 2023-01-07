@@ -2,12 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using MSS_API.Data;
 using MSS_API.Interfaces;
 using MSS_API.Repository;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); 
 
 // Add mapping profile
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
