@@ -43,6 +43,8 @@ namespace MSS_API.Data
         
         public DbSet<KanBanTask> KanBanTasks { get; set; }
 
+        public DbSet<TaskAllocatedResource> TaskAllocatedResources { get; set; }
+
         //For Many-Many relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

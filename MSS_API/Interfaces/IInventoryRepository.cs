@@ -1,4 +1,5 @@
-﻿using MSS_API.Models.Inventories;
+﻿using MSS_API.Models.AutomatedWarehouseRequests;
+using MSS_API.Models.Inventories;
 using MSS_API.Models.Workshops;
 
 namespace MSS_API.Interfaces
@@ -12,6 +13,8 @@ namespace MSS_API.Interfaces
         Inventory? GetInventory(int id);
 
         Inventory? GetInventory(string name);
+
+        InventoryItems? GetInventoryItem(int id);
 
         bool CheckInventoryIsExist(int id);
 
@@ -27,6 +30,8 @@ namespace MSS_API.Interfaces
 
         bool CreateInventoryItem(InventoryItems inventoryItem);
 
+        bool ReduceAmountInInventoryItems(InventoryItems inventoryItem);
+
         bool Save();
 
         ICollection<Workshop> GetWorkshopListWithSingleInventory();
@@ -34,5 +39,7 @@ namespace MSS_API.Interfaces
         ICollection<InventoryItems> GetItemsListOfInventory(int inventoryId);
 
         ICollection<InventoryItems> GetAllItemsList();
+
+        bool CreateAutomatedInventoryRequest(AutomatedWarehouseRequest request);
     }
 }

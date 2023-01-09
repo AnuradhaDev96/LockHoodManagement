@@ -6,6 +6,12 @@ namespace MSS_API.Models.AutomatedWarehouseRequests
 {
     public class AutomatedWarehouseRequest
     {
+        public AutomatedWarehouseRequest(DateTime createdOn, int inventoryId)
+        {
+            this.CreatedOn = createdOn;
+            this.InventoryId = inventoryId;
+        }
+
         [Key]
         [Display(Name = "Id")]
         public int Id { get; set; }
