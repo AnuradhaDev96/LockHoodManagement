@@ -15,13 +15,21 @@ namespace MSS_API.Interfaces
 
         ICollection<TaskAllocatedResource> GetAllocatedResourcesByTaskId(int taskId);
 
+        ICollection<ProductionBatch> GetAllProductionBatches();
+
         bool CheckAllocatedResourceIsExistForTaskWithSameItem(int taskId, int itemId);
+
+        bool CheckProductionBatchIsExist(int batchId);
 
         EmployeeUser? GetEmployeeUser(string email);
 
         ProductionBatch? GetProductionBatch(int id);
 
-        bool CreateAllocatedResourceForTask(TaskAllocatedResource data);        
+        ProductionBatch? GetOEECalculationResult(int batchId, int workshopId);
+
+        bool CreateAllocatedResourceForTask(TaskAllocatedResource data);     
+        
+        bool UpdateTestInformationByBatchId(ProductionBatch data);        
 
         bool Save();
     }

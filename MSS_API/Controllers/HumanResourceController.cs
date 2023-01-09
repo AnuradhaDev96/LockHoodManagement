@@ -168,5 +168,50 @@ namespace MSS_API.Controllers
 
             return Ok(allocatedResources);
         }
+        
+        [HttpGet("ProductionBatches")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200, Type = (typeof(IEnumerable<ProductionBatch>)))]
+        public IActionResult GetAllProductionBatches()
+        {
+            var data = _humanResourceRepository.GetAllProductionBatches();
+                        
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(data);
+        }
+
+        [HttpPut("ProductionBatches/UpdateTestInformation")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateTestInformationOfBatch([FromBody] UpdateTestInfoOfProductionBatchDto data)
+        {
+            if (data == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_humanResourceRepository.CheckProductionBatchIsExist(data.Id))
+                return NotFound();
+
+            if (data.TestedAmount < data.PassedAmount)
+            {
+                ModelState.AddModelError("", "Tested amount should be greater than passed amount");
+                return StatusCode(422, ModelState);
+            }            
+
+            var batchToBeEdited = _humanResourceRepository.GetProductionBatch(data.Id);
+            batchToBeEdited.TestedAmount = data.TestedAmount;
+            batchToBeEdited.PassedAmount = data.PassedAmount;            
+
+            if (!_humanResourceRepository.UpdateTestInformationByBatchId(batchToBeEdited))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating test information");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

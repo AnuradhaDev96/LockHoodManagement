@@ -62,5 +62,26 @@ namespace MSS_API.Repository
         {
             return _context.TaskAllocatedResources.Any(x => x.KanBanTaskId == taskId && x.InventoryItemId == itemId);
         }
+
+        public ICollection<ProductionBatch> GetAllProductionBatches()
+        {
+            return _context.ProductionBatches.OrderBy(w => w.Id).ToList();
+        }
+
+        public ProductionBatch? GetOEECalculationResult(int batchId, int workshopId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckProductionBatchIsExist(int batchId)
+        {
+            return _context.ProductionBatches.Any(w => w.Id == batchId);
+        }
+
+        public bool UpdateTestInformationByBatchId(ProductionBatch productionBatch)
+        {
+            _context.ProductionBatches.Update(productionBatch);
+            return Save();
+        }
     }
 }
