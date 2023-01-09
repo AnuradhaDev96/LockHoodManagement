@@ -1,6 +1,7 @@
 ﻿using MSS_API.Data;
 using MSS_API.Dto;
 using MSS_API.Interfaces;
+using MSS_API.Models.AutomatedWarehouseRequests;
 using MSS_API.Models.Inventories;
 using MSS_API.Models.Workshops;
 using System.Web.Http;
@@ -97,5 +98,24 @@ namespace MSS_API.Repository
         {
             return _context.InventoryItems.OrderBy(w => w.Id).ToList();
         }
+
+        public InventoryItems? GetInventoryItem(int id)
+        {
+            return _context.InventoryItems.Where(w => w.Id == id).FirstOrDefault();
+        }
+
+        public bool ReduceAmountInInventoryItems(InventoryItems inventoryItem)
+        {
+            _context.InventoryItems.Update(inventoryItem);
+            return Save();
+        }
+
+        public bool CreateAutomatedInventoryRequest(AutomatedWarehouseRequest request)
+        {
+            _context.AutomatedWarehouseRequests.Add(request);
+            return Save();
+        }
+
+        //AutomatedWarehouseRequest
     }
 }

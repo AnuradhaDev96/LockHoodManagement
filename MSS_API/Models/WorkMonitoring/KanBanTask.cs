@@ -37,5 +37,9 @@ namespace MSS_API.Models.WorkMonitoring
         [Display(Name = "Assigned Labourer")]
         public int LabourerId { get; set; }
         public EmployeeUser Labourer { get; set; }
+
+        //Task has Many resources (1-M relationship)
+        [Display(Name = "Allocated Resources")]
+        public ICollection<TaskAllocatedResource> TaskAllocatedResources { get; set; }
     }
 }

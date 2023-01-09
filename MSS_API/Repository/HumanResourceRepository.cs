@@ -34,5 +34,33 @@ namespace MSS_API.Repository
         {
             return _context.KanBanTasks.OrderBy(w => w.Id).ToList();
         }
+
+        public ProductionBatch? GetProductionBatch(int id)
+        {
+            return _context.ProductionBatches.Where(w => w.Id == id).FirstOrDefault();
+        }
+
+        public bool CreateAllocatedResourceForTask(TaskAllocatedResource data)
+        {
+            _context.TaskAllocatedResources.Add(data);
+
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public ICollection<TaskAllocatedResource> GetAllocatedResourcesByTaskId(int taskId)
+        {
+            return _context.TaskAllocatedResources.Where(x => x.KanBanTaskId == taskId).OrderBy(w => w.Id).ToList();
+        }
+
+        public bool CheckAllocatedResourceIsExistForTaskWithSameItem(int taskId, int itemId)
+        {
+            return _context.TaskAllocatedResources.Any(x => x.KanBanTaskId == taskId && x.InventoryItemId == itemId);
+        }
     }
 }

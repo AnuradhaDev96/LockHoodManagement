@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MSS_API.Dto;
 using MSS_API.Models.Inventories;
+using MSS_API.Models.WorkMonitoring;
 
 namespace MSS_API.Helper
 {
@@ -12,6 +13,8 @@ namespace MSS_API.Helper
             CreateMap<InventoryDto, Inventory>();
             CreateMap<InventoryItems, InventoryItemsDto>();
             CreateMap<InventoryItemsDto, InventoryItems>();
+            CreateMap<TaskAllocatedResource, TaskAllocatedResourceDto>();
+            CreateMap<TaskAllocatedResourceDto, TaskAllocatedResource>();
         }
     }
 }
