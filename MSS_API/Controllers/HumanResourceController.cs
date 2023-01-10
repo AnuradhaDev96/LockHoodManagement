@@ -18,6 +18,9 @@ namespace MSS_API.Controllers
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IMapper _mapper;
 
+        private double _downTimeForBreaksInMinutes = 55;
+        private double _idealCycleTimeInMinutes = 120;
+
         public HumanResourceController(IHumanResourceRepository humanResourceRepository, IInventoryRepository inventoryRepository, IMapper mapper)
         {
             _humanResourceRepository = humanResourceRepository;
@@ -167,6 +170,104 @@ namespace MSS_API.Controllers
                 return BadRequest(ModelState);
 
             return Ok(allocatedResources);
+        }
+        
+        [HttpGet("ProductionBatches")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200, Type = (typeof(IEnumerable<ProductionBatch>)))]
+        public IActionResult GetAllProductionBatches()
+        {
+            var data = _humanResourceRepository.GetAllProductionBatches();
+                        
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(data);
+        }
+
+        [HttpPut("ProductionBatches/UpdateTestInformation")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateTestInformationOfBatch([FromBody] UpdateTestInfoOfProductionBatchDto data)
+        {
+            if (data == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_humanResourceRepository.CheckProductionBatchIsExist(data.Id))
+                return NotFound();
+
+            if (data.TestedAmount < data.PassedAmount)
+            {
+                ModelState.AddModelError("", "Tested amount should be greater than passed amount");
+                return StatusCode(422, ModelState);
+            }            
+
+            var batchToBeEdited = _humanResourceRepository.GetProductionBatch(data.Id);
+            batchToBeEdited.TestedAmount = data.TestedAmount;
+            batchToBeEdited.PassedAmount = data.PassedAmount;            
+
+            if (!_humanResourceRepository.UpdateTestInformationByBatchId(batchToBeEdited))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating test information");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("ProductionBatches/ScheduleNewDateBasedOnOEE/{batchId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult ScheduleNewDateBasedOnOEE(int batchId)
+        {
+
+            if (!_humanResourceRepository.CheckProductionBatchIsExist(batchId))
+                return NotFound();            
+
+            var batchToBeEdited = _humanResourceRepository.GetProductionBatch(batchId);
+
+            // Calcuate OEE based on current date
+            // Calculate Availability
+            var plannedProductionTimeInMinutes = (batchToBeEdited.Deadline - DateTime.Now).Days * 8 * 60;
+            var operatedTimeInMinutes = plannedProductionTimeInMinutes - _downTimeForBreaksInMinutes;
+            var availabilityScore = operatedTimeInMinutes / plannedProductionTimeInMinutes;
+
+            // Calculate Performance
+            var remainingAmount = batchToBeEdited.Amount - batchToBeEdited.PassedAmount;
+            var performanceScore = _idealCycleTimeInMinutes * remainingAmount / operatedTimeInMinutes;
+
+            // Calculate Quality
+            var qualityScore = batchToBeEdited.PassedAmount / batchToBeEdited.Amount;
+
+            var oeeScore = availabilityScore * performanceScore * qualityScore * 100;
+
+            int daysToBeAdded = 0;
+            if (oeeScore <= 75 && oeeScore > 50)
+            {
+                daysToBeAdded = 7;
+            }
+            else if (oeeScore <= 50 && oeeScore > 35)
+            {
+                daysToBeAdded = 14;
+            }
+            else 
+            {
+                daysToBeAdded = 21;
+            }
+
+            batchToBeEdited.EstimatedScheduledDate = batchToBeEdited.Deadline.AddDays(daysToBeAdded);
+
+            if (!_humanResourceRepository.UpdateTestInformationByBatchId(batchToBeEdited))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating test information");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
     }
 }

@@ -13,9 +13,21 @@ namespace MSS_API.Models.WorkMonitoring
 
         [Display(Name = "Amount")]
         public int Amount { get; set; }
+        
+        [Display(Name = "Tested Amount")]
+        public int TestedAmount { get; set; }
+        
+        [Display(Name = "Passed Amount")]
+        public int PassedAmount { get; set; }
 
+        [Display(Name = "Production Begin Date")]
+        public DateTime ProductionBeginDate { get; set; }
+        
         [Display(Name = "Deadline")]
         public DateTime Deadline { get; set; }
+
+        [Display(Name = "Estimated Scheduled Date")]
+        public DateTime? EstimatedScheduledDate { get; set; }
 
         // ProductionBatch has One Department (1-M relationship)
         [ForeignKey("Workshop")]

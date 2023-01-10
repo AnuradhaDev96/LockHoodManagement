@@ -4,6 +4,7 @@ using MSS_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSSAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230109101914_AddTestingResultToBatch")]
+    partial class AddTestingResultToBatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,9 +300,6 @@ namespace MSSAPI.Migrations
 
                     b.Property<int>("PassedAmount")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("ProductionBeginDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("TestedAmount")
                         .HasColumnType("int");
