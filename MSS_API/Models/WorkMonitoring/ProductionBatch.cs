@@ -20,6 +20,9 @@ namespace MSS_API.Models.WorkMonitoring
         [Display(Name = "Passed Amount")]
         public int PassedAmount { get; set; }
 
+        [Display(Name = "Production Begin Date")]
+        public DateTime ProductionBeginDate { get; set; }
+        
         [Display(Name = "Deadline")]
         public DateTime Deadline { get; set; }
 
