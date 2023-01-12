@@ -6,6 +6,15 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//add cors
+builder.Services.AddCors(options => 
+{
+options.AddDefaultPolicy( builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers()
@@ -42,6 +51,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(builder => 
+{
+    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 
 app.MapControllers();
 
